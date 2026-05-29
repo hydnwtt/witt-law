@@ -1,9 +1,9 @@
 /**
- * lib/JsonLd.tsx  (F5)
+ * components/JsonLd.tsx  (F5)
  * Renders one or more JSON-LD objects as a <script type="application/ld+json">.
  * Server component — the schema is in the initial HTML for crawlers.
  *
- *   import { JsonLd } from "@/lib/JsonLd";
+ *   import { JsonLd } from "@/components/JsonLd";
  *   import { legalServiceSchema, organizationSchema } from "@/lib/jsonld";
  *   <JsonLd data={[legalServiceSchema(), organizationSchema()]} />
  */
