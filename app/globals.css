@@ -1,0 +1,204 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   Witt Law — design tokens (F1)
+   Per WITT_LAW_BUILD_SPEC.md §4. Tailwind v4 reads these from @theme and
+   generates utilities (bg-navy, text-ink, border-line, font-serif, ...).
+
+   Accessibility note on the gold accent (#b8862f): white text on solid gold is
+   ~3.2:1 — it FAILS AA for normal body text. So gold is used for rule lines,
+   focus rings, borders, and an *outline* button; the primary CTA button uses
+   navy (~10:1). Text links use `accent-strong` (#8a6420, ~5.4:1 on white).
+   ============================================================================= */
+
+@theme {
+  /* Brand colors (starting points — adjust to the real logo) */
+  --color-ink: #1a2238; /* near-navy; primary text + headers */
+  --color-navy: #233659; /* brand primary */
+  --color-navy-dark: #1b2b48; /* primary button hover */
+  --color-accent: #b8862f; /* muted gold/brass — borders, rules, focus */
+  --color-accent-strong: #8a6420; /* AA-safe gold for text links (5.4:1) */
+  --color-accent-dark: #6f4f19; /* gold link hover */
+  --color-bg: #ffffff;
+  --color-bg-soft: #f5f4f0; /* warm off-white section background */
+  --color-line: #e3e1da; /* hairline borders */
+  --color-muted: #5b6472; /* secondary text (AA on white) */
+  --color-success: #2f6f4f; /* form success */
+  --color-danger: #9b2c2c; /* form error */
+
+  /* Typography — wired to next/font CSS variables (see app/layout.tsx) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, "Times New Roman",
+    serif;
+
+  /* Layout */
+  --container-content: 72rem; /* 1152px outer container */
+  --container-prose: 44rem; /* ~70ch comfortable reading measure */
+}
+
+/* ----------------------------------------------------------------------------
+   Base
+   ---------------------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* keep anchored sections clear of the sticky header when jumped to */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    color: var(--color-ink);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  /* Visible focus everywhere (gold ring, 3:1 against white = AA for UI) */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-accent) 25%, transparent);
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Reusable component classes (keeps JSX clean across the component library)
+   ---------------------------------------------------------------------------- */
+@layer components {
+  .container-content {
+    width: 100%;
+    max-width: var(--container-content);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  /* Buttons -------------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    border: 1px solid transparent;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+    text-align: center;
+  }
+
+  /* Primary = navy (white text, ~10:1) */
+  .btn-primary {
+    background-color: var(--color-navy);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background-color: var(--color-navy-dark);
+  }
+
+  /* Secondary = gold outline (ink text, AA-safe) */
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-ink);
+    border-color: var(--color-accent);
+  }
+  .btn-secondary:hover {
+    background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+
+  /* On dark backgrounds (e.g. CTA band) */
+  .btn-on-dark {
+    background-color: var(--color-accent);
+    color: #1a1304;
+  }
+  .btn-on-dark:hover {
+    background-color: color-mix(in srgb, var(--color-accent) 88%, #fff);
+  }
+  .btn-outline-on-dark {
+    background-color: transparent;
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.45);
+  }
+  .btn-outline-on-dark:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Text link style for body copy */
+  .link {
+    color: var(--color-accent-strong);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .link:hover {
+    color: var(--color-accent-dark);
+  }
+
+  /* Gold rule line used under section eyebrows/headings */
+  .rule-accent {
+    width: 3rem;
+    height: 3px;
+    background-color: var(--color-accent);
+    border-radius: 999px;
+  }
+
+  /* Long-form reading container + prose (no typography plugin dependency) */
+  .prose {
+    max-width: var(--container-prose);
+    color: var(--color-ink);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+  .prose p {
+    margin-block: 1rem;
+  }
+  .prose p:first-child {
+    margin-top: 0;
+  }
+  .prose h2 {
+    font-size: 1.6rem;
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose h3 {
+    font-size: 1.25rem;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose ul {
+    margin-block: 1rem;
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+  .prose li {
+    margin-block: 0.4rem;
+  }
+  .prose a {
+    color: var(--color-accent-strong);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose strong {
+    font-weight: 600;
+  }
+}
