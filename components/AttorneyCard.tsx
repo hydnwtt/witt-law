@@ -2,7 +2,7 @@
  * components/AttorneyCard.tsx
  * Team member as the design's image-top .card: photo, role tag, name, blurb, and
  * "View bio →" for attorneys. Real headshots via Avatar (olive placeholder when
- * missing, e.g. Abraham Ivie).
+ * missing).
  */
 
 import Link from "next/link";

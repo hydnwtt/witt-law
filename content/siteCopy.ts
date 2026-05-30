@@ -63,7 +63,7 @@ export const legalPages = {
       { type: "p" as const, text: "The information on this website is provided for general informational purposes only and is **not legal advice**. Reading this site, or contacting Witt Law through it, does **not** create an attorney-client relationship. An attorney-client relationship is formed only when you and the firm sign a written agreement." },
       { type: "p" as const, text: "Please do **not** send confidential or time-sensitive information through the contact form until an attorney-client relationship has been established." },
       { type: "p" as const, text: "Any results described on this site are specific to the facts of those matters and are not a guarantee or prediction of the outcome of any other matter. Past results do not guarantee future outcomes." },
-      { type: "p" as const, text: "Witt Law's attorneys are licensed in Utah (and Nevada, per attorney Abraham Ivie — confirm). This site may be considered attorney advertising under the Utah Rules of Professional Conduct." },
+      { type: "p" as const, text: "Witt Law's attorney is licensed in Utah. This site may be considered attorney advertising under the Utah Rules of Professional Conduct." },
     ],
   },
 };

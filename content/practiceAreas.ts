@@ -109,7 +109,7 @@ export const practiceAreas: PracticeArea[] = [
     keyword: "St George divorce attorney",
     copyStatus: "ready",
     buildPriority: 3,
-    attorneySlugs: ["abraham-ivie", "marshall-witt"],
+    attorneySlugs: ["marshall-witt"], // Abraham Ivie removed (left firm)
     intro: [
       "You can find basic divorce forms online, but no one should go through a divorce without competent legal counsel. Divorce decrees are very hard to modify later, so it's important to get things right the first time.",
       "Witt Law has years of experience in family law. We understand that every divorce is personal, and we'll work toward a fair outcome that lets you move forward with your life.",

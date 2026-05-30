@@ -54,27 +54,9 @@ export const team: TeamMember[] = [
       "mediation",
     ],
   },
-  {
-    slug: "abraham-ivie",
-    name: "Abraham Ivie",
-    title: "Attorney",
-    role: "attorney",
-    headshot: "/images/team/abraham-ivie.jpg",
-    blurb:
-      "Family law attorney focused on parentage, custody, support, and protective orders. Licensed in Utah and Nevada; fluent in Spanish.",
-    bio: [
-      "Abe was born and raised in Las Vegas, is an Eagle Scout, and became fluent in Spanish while serving an LDS mission in Argentina. He is married with two young children.",
-      "He graduated from the William S. Boyd School of Law at UNLV, where he served as President of the J. Reuben Clark Law Society. Before bringing his family to St. George and joining Witt Law, he practiced at Wood Smith Henning & Berman.",
-      "Abe's practice focuses on family law — parentage, separation, divorce, custody, support, modification, enforcement, protective orders, and guardianship.",
-    ],
-    credentials: [
-      "J.D., William S. Boyd School of Law, University of Nevada, Las Vegas",
-      "President, J. Reuben Clark Law Society (Boyd School of Law)",
-    ],
-    barAdmissions: ["Utah State Bar", "Nevada State Bar"], // TODO: VERIFY dual licensure
-    associations: [],
-    practiceAreaSlugs: ["divorce-family-law", "mediation"],
-  },
+  // NOTE: Abraham Ivie has left the firm and is intentionally removed sitewide
+  // per the design handoff (design-reference/project/CLAUDE.md). Marshall Witt is
+  // now the sole attorney. Do not re-add without firm confirmation.
   {
     slug: "sheryl-slebodnick",
     name: "Sheryl Slebodnick",
