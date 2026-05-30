@@ -376,6 +376,23 @@ a { color: inherit; text-decoration: none; }
 .attorney-strip__info h3 { font-size: 1.75rem; margin: 8px 0 12px; }
 .attorney-strip__info p { font-size: var(--fs-sm); color: var(--ink-2); max-width: 52ch; margin-bottom: 16px; }
 
+/* ATTORNEY FEATURE ROW (listing page) */
+.att-feat { display: grid; grid-template-columns: 320px 1fr; border: 1px solid var(--line); background: var(--paper); }
+.att-feat + .att-feat { margin-top: 24px; }
+.att-feat__photo { position: relative; background: var(--paper-2); overflow: hidden; min-height: 400px; display: block; }
+.att-feat__body { padding: clamp(28px,3.5vw,48px); display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+@media (max-width: 760px) { .att-feat { grid-template-columns: 1fr; } .att-feat__photo { min-height: 320px; } }
+
+/* BIO PAGE */
+.bio-head { display: grid; grid-template-columns: 340px 1fr; gap: clamp(36px,5vw,56px); align-items: center; padding-block: clamp(48px,7vw,88px); }
+.bio-head__photo { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; background: var(--olive-700); }
+.bio-grid { display: grid; grid-template-columns: 1fr 320px; gap: clamp(40px,5vw,64px); align-items: start; }
+.bio-aside { display: flex; flex-direction: column; gap: 28px; }
+.bio-aside ul { list-style: none; padding: 0; margin: 0; }
+.bio-aside li { padding: 14px 0; border-bottom: 1px solid var(--line); font-size: var(--fs-sm); }
+.bio-card { border: 1px solid var(--line); padding: 24px; background: var(--paper-2); }
+@media (max-width: 860px) { .bio-head, .bio-grid { grid-template-columns: 1fr; } }
+
 /* DISCLAIMER BAND */
 .disclaimer { background: var(--paper-2); border-block: 1px solid var(--line); }
 .disclaimer .container { padding-block: var(--sp-6); }
