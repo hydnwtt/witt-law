@@ -10,6 +10,7 @@ import { absoluteUrl } from "@/lib/site";
 import { practiceAreas } from "@/content/practiceAreas";
 import { attorneys } from "@/content/team";
 import { posts } from "@/content/posts";
+import { cities } from "@/content/cities";
 
 type Freq = MetadataRoute.Sitemap[number]["changeFrequency"];
 
@@ -25,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/reviews/", priority: 0.6, freq: "monthly" },
     { path: "/faqs/", priority: 0.6, freq: "monthly" },
     { path: "/blog/", priority: 0.6, freq: "weekly" },
+    { path: "/areas-we-serve/", priority: 0.5, freq: "monthly" },
     { path: "/privacy/", priority: 0.2, freq: "yearly" },
     { path: "/legal-disclaimer/", priority: 0.2, freq: "yearly" },
   ];
@@ -39,7 +41,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const blogRoutes = posts.map((p) => ({ path: `/blog/${p.slug}/`, priority: 0.5, freq: "monthly" as Freq }));
 
-  return [...staticRoutes, ...pillarRoutes, ...serviceRoutes, ...attorneyRoutes, ...blogRoutes].map((r) => ({
+  const cityRoutes = cities.map((c) => ({ path: `/areas-we-serve/${c.slug}/`, priority: 0.5, freq: "monthly" as Freq }));
+
+  return [...staticRoutes, ...pillarRoutes, ...serviceRoutes, ...attorneyRoutes, ...blogRoutes, ...cityRoutes].map((r) => ({
     url: absoluteUrl(r.path),
     lastModified: now,
     changeFrequency: r.freq,
