@@ -10,10 +10,11 @@ import Link from "next/link";
 import { Phone } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
-import { legalServiceSchema, breadcrumbSchema } from "@/lib/jsonld";
+import { legalServiceSchema, breadcrumbSchema, faqPageSchema } from "@/lib/jsonld";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BlockContent } from "@/components/BlockContent";
+import { FAQAccordion } from "@/components/FAQAccordion";
 import { CTA } from "@/components/CTA";
 import { cities, getCity } from "@/content/cities";
 import { practiceAreas } from "@/content/practiceAreas";
@@ -47,6 +48,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
             { name: "Areas We Serve", path: "/areas-we-serve/" },
             { name: c.name, path: `/areas-we-serve/${c.slug}/` },
           ]),
+          ...(c.faqs.length ? [faqPageSchema(c.faqs)] : []),
         ]}
       />
 
@@ -97,6 +99,15 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
             <div className="prose">
               <BlockContent blocks={c.court} />
             </div>
+          </Container>
+        </section>
+      )}
+
+      {c.faqs.length > 0 && (
+        <section className="section section--tight">
+          <Container>
+            <SectionHeading eyebrow="FAQs">{c.name} questions</SectionHeading>
+            <FAQAccordion faqs={c.faqs} defaultOpenFirst />
           </Container>
         </section>
       )}
