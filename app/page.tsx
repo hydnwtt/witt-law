@@ -1,12 +1,11 @@
 /**
- * app/page.tsx — Home (P1)
- * Hero → trust bar → intro → 6 practice cards → value props → 3 featured
- * testimonials → CTA. Emits LegalService/LocalBusiness + Organization JSON-LD.
- * All copy from content/* (home.ts, practiceAreas.ts, testimonials.ts).
+ * app/page.tsx — Home (P1), built to the Witt Law design (templates/01-home.html).
+ * Split hero → trust bar → intro (text + photo) → 6 practice cards → olive value
+ * props → 3 featured testimonials → olive CTA. LegalService + Organization JSON-LD.
+ * Copy from content/*.
  */
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
 import { buildMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
@@ -14,6 +13,7 @@ import { legalServiceSchema, organizationSchema } from "@/lib/jsonld";
 
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { Hero } from "@/components/Hero";
 import { CTA } from "@/components/CTA";
 import { TrustBar } from "@/components/TrustBar";
@@ -21,7 +21,13 @@ import { PracticeCard } from "@/components/PracticeCard";
 import { ValueProps } from "@/components/ValueProps";
 import { TestimonialCard } from "@/components/TestimonialCard";
 
-import { homeHero, homeIntro, homeCardBlurbs, homeTrustItems } from "@/content/home";
+import {
+  homeHero,
+  homeIntro,
+  homeCardBlurbs,
+  homeTrustItems,
+  homeTrustCaption,
+} from "@/content/home";
 import { practiceAreas } from "@/content/practiceAreas";
 import { featuredTestimonials } from "@/content/testimonials";
 
@@ -38,30 +44,53 @@ export default function Home() {
       <JsonLd data={[legalServiceSchema(), organizationSchema()]} />
 
       <Hero
+        variant="split"
         eyebrow={homeHero.eyebrow}
         title={homeHero.title}
         subhead={homeHero.subhead}
+        media={<ImagePlaceholder label="Witt Law attorneys, St. George" />}
       />
 
-      <TrustBar items={homeTrustItems} />
+      <TrustBar caption={homeTrustCaption} items={homeTrustItems} />
 
-      {/* Intro */}
-      <Container className="py-14">
-        <SectionHeading as="h2">{homeIntro.heading}</SectionHeading>
-        <div className="prose mt-4">
-          {homeIntro.paragraphs.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-        </div>
-      </Container>
+      {/* Intro — text + photo */}
+      <section className="section">
+        <Container>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1.05fr 0.95fr",
+              gap: "clamp(32px,5vw,64px)",
+              alignItems: "center",
+            }}
+            className="home-intro"
+          >
+            <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              <span className="eyebrow">Who we are</span>
+              <h2>{homeIntro.heading}</h2>
+              {homeIntro.paragraphs.map((p, i) => (
+                <p key={i} className={i === 0 ? "lead" : "muted"}>
+                  {p}
+                </p>
+              ))}
+              <Link className="link-arrow" href="/about/" style={{ alignSelf: "flex-start" }}>
+                Meet the firm <span className="arr">→</span>
+              </Link>
+            </div>
+            <div style={{ aspectRatio: "4 / 3", position: "relative", overflow: "hidden" }}>
+              <ImagePlaceholder label="Witt Law office team" />
+            </div>
+          </div>
+        </Container>
+      </section>
 
       {/* Practice areas */}
-      <section className="border-y border-line bg-bg-soft">
-        <Container className="py-14">
-          <SectionHeading as="h2" eyebrow="How we help">
-            Our practice areas
+      <section className="section section--tight">
+        <Container>
+          <SectionHeading eyebrow="Our practice areas">
+            How we help Southern Utah families
           </SectionHeading>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="cards cols-3">
             {practiceAreas.map((p) => (
               <PracticeCard
                 key={p.slug}
@@ -76,33 +105,31 @@ export default function Home() {
       </section>
 
       {/* Why Witt Law */}
-      <Container className="py-14">
-        <SectionHeading as="h2" eyebrow="Why Witt Law">
-          What sets us apart
-        </SectionHeading>
-        <div className="mt-8">
+      <section className="section on-olive hatch">
+        <Container>
+          <SectionHeading eyebrow="Why Witt Law">What you can count on from us</SectionHeading>
           <ValueProps />
-        </div>
-      </Container>
+        </Container>
+      </section>
 
       {/* Featured testimonials */}
-      <section className="border-t border-line bg-bg-soft">
-        <Container className="py-14">
-          <SectionHeading as="h2" eyebrow="Client reviews">
-            What our clients say
+      <section className="section">
+        <Container>
+          <SectionHeading
+            eyebrow="Client stories"
+            action={
+              <Link className="btn btn--ink" href="/reviews/">
+                Read more client stories <span className="arr">↗</span>
+              </Link>
+            }
+          >
+            Words from the people we&apos;ve stood beside
           </SectionHeading>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="cards cols-3">
             {featuredTestimonials.map((t) => (
               <TestimonialCard key={t.name} testimonial={t} />
             ))}
           </div>
-          <Link
-            href="/reviews/"
-            className="mt-6 inline-flex items-center gap-1 font-semibold text-accent-strong hover:text-accent-dark"
-          >
-            Read more client stories
-            <ArrowRight aria-hidden="true" className="size-4" />
-          </Link>
         </Container>
       </section>
 

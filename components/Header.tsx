@@ -1,57 +1,124 @@
+"use client";
+
 /**
- * components/Header.tsx  (F2)
- * Sticky, slim site header. Logo (→ home), centered/desktop nav with the
- * Practice Areas dropdown + top-level links, a top-right click-to-call, and a
- * Contact button. Mobile collapses to a hamburger (MobileNav). Phone from firm.ts.
+ * components/Header.tsx
+ * Olive sticky header (design's .site-header). Brand, Practice Areas dropdown,
+ * Results/About/Blog, click-to-call, Contact button. Below 900px the desktop nav
+ * collapses to a hamburger that opens a mobile panel (the build doc requires a
+ * working mobile menu; the design's look is preserved). Phone/nav from content.
  */
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Phone } from "lucide-react";
+import { ChevronDown, Phone, Menu, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
-import { PracticeAreasDropdown } from "@/components/header/PracticeAreasDropdown";
-import { MobileNav } from "@/components/header/MobileNav";
-import { primaryNav } from "@/lib/nav";
+import { practiceNav, primaryNav } from "@/lib/nav";
 import { firm } from "@/content/firm";
 
 export function Header() {
+  const [ddOpen, setDdOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const ddRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (ddRef.current && !ddRef.current.contains(e.target as Node)) setDdOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { setDdOpen(false); setMobileOpen(false); }
+    };
+    document.addEventListener("click", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("click", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-bg/95 backdrop-blur">
-      <div className="container-content flex h-16 items-center justify-between gap-4">
-        <Link href="/" aria-label={`${firm.name} — home`} className="shrink-0">
-          <Logo />
+    <header className="site-header">
+      <div className="container">
+        <Link className="brand" href="/" aria-label={`${firm.name} — home`}>
+          {firm.shortName.toUpperCase()}
+          <sup>&reg;</sup>
         </Link>
 
-        {/* Desktop nav */}
-        <nav aria-label="Primary" className="hidden items-center gap-6 md:flex">
-          <PracticeAreasDropdown />
-          {primaryNav.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="px-1 py-2 text-sm font-medium text-ink hover:text-navy"
+        <nav className="nav" aria-label="Primary">
+          <div className="nav__desktop">
+            <div
+              ref={ddRef}
+              className="nav-dd"
+              data-open={ddOpen}
+              onMouseEnter={() => setDdOpen(true)}
+              onMouseLeave={() => setDdOpen(false)}
             >
-              {link.label}
+              <button
+                className="nav-dd__btn"
+                aria-haspopup="true"
+                aria-expanded={ddOpen}
+                onClick={(e) => { e.stopPropagation(); setDdOpen((v) => !v); }}
+              >
+                Practice Areas <span className="chev"><ChevronDown /></span>
+              </button>
+              <div className="nav-dd__menu" role="menu">
+                {practiceNav.map((l) => (
+                  <Link key={l.href} href={l.href} role="menuitem" onClick={() => setDdOpen(false)}>
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {primaryNav.map((l) => (
+              <Link key={l.href} href={l.href}>
+                {l.label}
+              </Link>
+            ))}
+
+            <a className="nav__call" href={firm.phone.href}>
+              <Phone /> {firm.phone.display}
+            </a>
+          </div>
+
+          <Link className="btn btn--light" href="/contact/">
+            Contact <span className="arr">↗</span>
+          </Link>
+
+          <button
+            type="button"
+            className="nav__toggle"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            {mobileOpen ? <X /> : <Menu />}
+          </button>
+        </nav>
+      </div>
+
+      {mobileOpen && (
+        <div id="mobile-menu" className="nav__mobile">
+          <span className="mono-label">Practice Areas</span>
+          {practiceNav.map((l) => (
+            <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>
+              {l.label}
             </Link>
           ))}
-        </nav>
-
-        {/* Desktop actions */}
-        <div className="hidden items-center gap-3 md:flex">
-          <a
-            href={firm.phone.href}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-navy hover:text-navy-dark"
-          >
-            <Phone aria-hidden="true" className="size-4" />
-            {firm.phone.display}
+          <span className="mono-label">Firm</span>
+          {primaryNav.map((l) => (
+            <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>
+              {l.label}
+            </Link>
+          ))}
+          <a href={firm.phone.href} onClick={() => setMobileOpen(false)}>
+            Call {firm.phone.display}
           </a>
-          <Link href="/contact/" className="btn btn-primary">
-            Contact Us
+          <Link className="btn btn--light" href="/contact/" onClick={() => setMobileOpen(false)}>
+            Contact <span className="arr">↗</span>
           </Link>
         </div>
-
-        {/* Mobile */}
-        <MobileNav />
-      </div>
+      )}
     </header>
   );
 }

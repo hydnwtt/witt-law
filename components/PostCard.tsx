@@ -1,18 +1,18 @@
 /**
  * components/PostCard.tsx
- * Blog post card for the /blog/ grid (Phase 2). Image, category, title, excerpt,
- * date. Whole card links to the post. Uses ImagePlaceholder until post images
- * are supplied.
+ * Blog card (design's .card): image, category tag, title, excerpt, date. Whole
+ * card links to the post. Uses next/image when a real image is supplied.
  */
 
 import Link from "next/link";
+import Image from "next/image";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 
 export interface PostMeta {
   slug: string;
   title: string;
   excerpt: string;
-  date: string; // ISO
+  date: string;
   category?: string;
   image?: string;
 }
@@ -25,29 +25,22 @@ export function PostCard({ post }: { post: PostMeta }) {
   }).format(new Date(post.date));
 
   return (
-    <article className="group relative flex flex-col">
-      <div className="overflow-hidden rounded-xl">
-        <ImagePlaceholder label={`Post image: ${post.title}`} ratio="16 / 9" />
-      </div>
-      <div className="mt-4 flex flex-col">
-        {post.category && (
-          <span className="text-xs font-semibold uppercase tracking-wider text-accent-strong">
-            {post.category}
-          </span>
+    <Link className="card" href={`/blog/${post.slug}/`}>
+      <div className="card__media">
+        {post.image ? (
+          <Image src={post.image} alt={post.title} fill sizes="(max-width:900px) 100vw, 380px" style={{ objectFit: "cover" }} />
+        ) : (
+          <ImagePlaceholder label={post.title} />
         )}
-        <h3 className="mt-1 text-lg">
-          <Link
-            href={`/blog/${post.slug}/`}
-            className="after:absolute after:inset-0 hover:text-navy"
-          >
-            {post.title}
-          </Link>
-        </h3>
-        <p className="mt-2 text-sm text-muted leading-relaxed">{post.excerpt}</p>
-        <time dateTime={post.date} className="mt-3 text-xs text-muted">
+      </div>
+      <div className="card__body">
+        {post.category && <span className="card__tag">{post.category}</span>}
+        <h3>{post.title}</h3>
+        <p>{post.excerpt}</p>
+        <time dateTime={post.date} className="faint" style={{ fontSize: "var(--fs-sm)", marginTop: "auto" }}>
           {displayDate}
         </time>
       </div>
-    </article>
+    </Link>
   );
 }

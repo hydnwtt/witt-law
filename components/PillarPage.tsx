@@ -1,12 +1,9 @@
 /**
- * components/PillarPage.tsx  (P2–P7 shared template)
- * Renders a complete practice-area pillar page from typed content, keyed by slug:
- *   Hero → intro → optional note/body/value-props/feature → anchored service
- *   sections (with JumpList) → "areas we handle" → FAQ → attorney strip → CTA.
- *
- * Emits LegalService + BreadcrumbList + (when present) FAQPage JSON-LD. All copy
- * comes from content/*; nothing hard-coded. Service sections are real <section id>
- * blocks present in the initial DOM (no JS tab-gating).
+ * components/PillarPage.tsx  (shared P2–P7 template, design layout)
+ * Hero (olive banner) → intro + jump list → anchored service sections → optional
+ * value props / mediator feature / real-estate body / "areas we handle" → FAQ
+ * (paper-2) → attorney strip → olive CTA. Emits LegalService + BreadcrumbList +
+ * FAQPage JSON-LD. All copy from content/*; sections are crawlable <section id>s.
  */
 
 import { notFound } from "next/navigation";
@@ -23,11 +20,7 @@ import { FAQAccordion } from "@/components/FAQAccordion";
 import { ValueProps } from "@/components/ValueProps";
 import { AttorneyStrip } from "@/components/AttorneyStrip";
 import { JsonLd } from "@/components/JsonLd";
-import {
-  legalServiceSchema,
-  breadcrumbSchema,
-  faqPageSchema,
-} from "@/lib/jsonld";
+import { legalServiceSchema, breadcrumbSchema, faqPageSchema } from "@/lib/jsonld";
 import { getPillar } from "@/content/practiceAreas";
 import { pillarContent } from "@/content/pillarSections";
 import { getFaqs } from "@/content/faqs";
@@ -53,73 +46,83 @@ export function PillarPage({ slug }: { slug: string }) {
     <>
       <JsonLd data={schema} />
 
-      <Hero title={pillar.h1} subhead={pillar.subhead} />
+      <Hero
+        variant="banner"
+        eyebrow="Practice Area · St. George, Utah"
+        title={pillar.h1}
+        subhead={pillar.subhead}
+      />
 
-      {/* Breadcrumb */}
-      <Container className="pt-6">
-        <nav aria-label="Breadcrumb" className="text-sm text-muted">
-          <Link href="/" className="hover:text-navy">
-            Home
-          </Link>{" "}
-          <span aria-hidden="true">/</span>{" "}
-          <span className="text-ink">{pillar.name}</span>
-        </nav>
-      </Container>
-
-      {/* Intro */}
-      <Container className="py-8">
-        <div className="prose">
-          {pillar.intro.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-        </div>
-
-        {extras.note && (
-          <div className="prose mt-6 rounded-xl border border-line bg-bg-soft p-6">
-            <h2 className="!mt-0 text-xl">{extras.note.heading}</h2>
-            <BlockContent blocks={extras.note.blocks} />
+      {/* Intro + jump list */}
+      <section className="section section--tight">
+        <Container>
+          <nav aria-label="Breadcrumb" className="mono-label" style={{ marginBottom: 24 }}>
+            <Link href="/">Home</Link> / {pillar.name}
+          </nav>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: sections.length ? "1.15fr 0.85fr" : "1fr",
+              gap: "clamp(32px,5vw,64px)",
+              alignItems: "start",
+            }}
+            className="pillar-intro"
+          >
+            <div className="prose">
+              {pillar.intro.map((p, i) => (
+                <p key={i} className={i === 0 ? "lead" : undefined} style={i === 0 ? { color: "var(--ink)" } : undefined}>
+                  {p}
+                </p>
+              ))}
+              {extras.note && (
+                <>
+                  <h3>{extras.note.heading}</h3>
+                  <BlockContent blocks={extras.note.blocks} />
+                </>
+              )}
+              {extras.body && <BlockContent blocks={extras.body.blocks} />}
+            </div>
+            {sections.length > 0 && (
+              <div>
+                <div className="mono-label" style={{ marginBottom: 14 }}>
+                  Jump to a topic
+                </div>
+                <JumpList items={sections.map((s) => ({ href: `#${s.id}`, label: s.title }))} />
+              </div>
+            )}
           </div>
-        )}
+        </Container>
+      </section>
 
-        {extras.body && (
-          <div className="prose mt-6">
-            <BlockContent blocks={extras.body.blocks} />
-          </div>
-        )}
-      </Container>
-
-      {/* Value props (Mediation) */}
+      {/* Mediation value props */}
       {extras.showValueProps && (
-        <section className="border-y border-line bg-bg-soft">
-          <Container className="py-12">
-            <SectionHeading as="h2" eyebrow="Why Witt Law">
-              What you can expect from us
-            </SectionHeading>
-            <div className="mt-8">
-              <ValueProps />
+        <section className="section on-olive hatch">
+          <Container>
+            <SectionHeading eyebrow="Why Witt Law">What you can count on from us</SectionHeading>
+            <ValueProps />
+          </Container>
+        </section>
+      )}
+
+      {/* Mediator feature */}
+      {extras.feature && (
+        <section className="section section--tight">
+          <Container>
+            <div className="prose" style={{ maxWidth: "72ch" }}>
+              <h2>{extras.feature.heading}</h2>
+              <BlockContent blocks={extras.feature.blocks} />
             </div>
           </Container>
         </section>
       )}
 
-      {/* Feature (Mediator bio) */}
-      {extras.feature && (
-        <Container className="py-12">
-          <div className="prose max-w-none rounded-xl border border-line bg-bg p-6 sm:p-8">
-            <h2 className="!mt-0">{extras.feature.heading}</h2>
-            <BlockContent blocks={extras.feature.blocks} />
-          </div>
-        </Container>
-      )}
-
-      {/* Anchored service sections + jump list */}
+      {/* Anchored service sections */}
       {sections.length > 0 && (
-        <Container className="py-4">
-          <div className="grid gap-10 lg:grid-cols-[220px_1fr]">
-            <JumpList
-              className="hidden lg:sticky lg:top-24 lg:block lg:self-start"
-              items={sections.map((s) => ({ id: s.id, label: s.title }))}
-            />
+        <section className="section section--tight" id="services">
+          <Container>
+            <SectionHeading eyebrow="What we handle">
+              {pillar.name === "Personal Injury" ? "Injury cases we take on" : `${pillar.name} services`}
+            </SectionHeading>
             <div>
               {sections.map((s) => (
                 <PracticeSection
@@ -132,45 +135,44 @@ export function PillarPage({ slug }: { slug: string }) {
                 </PracticeSection>
               ))}
             </div>
-          </div>
-        </Container>
+          </Container>
+        </section>
       )}
 
       {/* Areas we handle (Real Estate / Mediation) */}
       {extras.handles && extras.handles.length > 0 && (
-        <Container className="py-8">
-          <SectionHeading as="h2">{extras.handlesHeading ?? "What we handle"}</SectionHeading>
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {extras.handles.map((item) => (
-              <li
-                key={item}
-                className="rounded-lg border border-line bg-bg px-4 py-3 text-ink"
-              >
-                {item}
-              </li>
-            ))}
-          </ul>
-        </Container>
-      )}
-
-      {/* FAQ */}
-      {faqs.length > 0 && (
-        <section className="border-t border-line bg-bg-soft">
-          <Container className="py-12">
-            <SectionHeading as="h2" eyebrow="Common questions">
-              {pillar.name} FAQs
+        <section className="section section--tight">
+          <Container>
+            <SectionHeading eyebrow="What we handle">
+              {extras.handlesHeading ?? "What we handle"}
             </SectionHeading>
-            <div className="mt-6 max-w-3xl">
-              <FAQAccordion faqs={faqs} defaultOpenFirst />
+            <div className="svc-grid cols-3">
+              {extras.handles.map((item) => (
+                <div className="svc" key={item}>
+                  <h3>{item}</h3>
+                </div>
+              ))}
             </div>
           </Container>
         </section>
       )}
 
+      {/* FAQ */}
+      {faqs.length > 0 && (
+        <section className="section on-paper-2">
+          <Container>
+            <SectionHeading eyebrow="FAQs">{pillar.name} questions in Utah</SectionHeading>
+            <FAQAccordion faqs={faqs} defaultOpenFirst />
+          </Container>
+        </section>
+      )}
+
       {/* Attorney strip */}
-      <Container className="py-12">
-        <AttorneyStrip slugs={pillar.attorneySlugs} />
-      </Container>
+      <section className="section section--tight">
+        <Container>
+          <AttorneyStrip slugs={pillar.attorneySlugs} />
+        </Container>
+      </section>
 
       <CTA />
     </>

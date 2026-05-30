@@ -1,6 +1,6 @@
 /**
  * components/ui/Container.tsx
- * Centered max-width wrapper (1152px) with responsive gutters.
+ * Centered max-width wrapper (design's .container — 1200px, 24px gutters).
  */
 
 import type { ElementType, ReactNode } from "react";
@@ -14,5 +14,5 @@ export function Container({
   className?: string;
   children: ReactNode;
 }) {
-  return <Tag className={`container-content ${className}`.trim()}>{children}</Tag>;
+  return <Tag className={`container ${className}`.trim()}>{children}</Tag>;
 }

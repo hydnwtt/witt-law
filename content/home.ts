@@ -37,10 +37,11 @@ export const homeCardBlurbs: Record<string, string> = {
   mediation: "A faster, less adversarial path to resolving disputes.",
 };
 
-/** Trust strip — factual signals only. TODO: VERIFY years/founding with firm. */
+/** Trust strip marks — factual signals only. TODO: VERIFY years with firm. */
 export const homeTrustItems = [
-  { value: "30+", label: "Years of practice" },
-  { value: "Since 2013", label: "St. George office" },
-  { value: "6", label: "Practice areas" },
-  { value: "Free", label: "Initial consultations" },
+  "20+ Years in Practice",
+  "Utah State Bar",
+  "Free Consultations",
+  "St. George, Utah",
 ];
+export const homeTrustCaption = "Serving Southern Utah for more than two decades";

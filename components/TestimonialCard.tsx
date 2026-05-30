@@ -1,22 +1,33 @@
 /**
  * components/TestimonialCard.tsx
- * A single client review: 5-star rating, quote, attributed name.
- * No Review/AggregateRating schema is emitted (see testimonials.ts).
+ * Client review as the design's .card > .tcard: olive stars, quote, name + role.
+ * No Review/AggregateRating schema (see testimonials.ts).
  */
 
-import { Stars } from "@/components/ui/Stars";
+import { Star } from "lucide-react";
 import type { Testimonial } from "@/content/testimonials";
 
-export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
+export function TestimonialCard({
+  testimonial,
+  role = "Verified client review",
+}: {
+  testimonial: Testimonial;
+  role?: string;
+}) {
   return (
-    <figure className="flex h-full flex-col rounded-xl border border-line bg-bg p-6">
-      <Stars rating={testimonial.rating} />
-      <blockquote className="mt-4 grow text-ink leading-relaxed">
-        &ldquo;{testimonial.quote}&rdquo;
-      </blockquote>
-      <figcaption className="mt-4 font-semibold text-ink">
-        {testimonial.name}
-      </figcaption>
-    </figure>
+    <div className="card">
+      <div className="tcard">
+        <div className="stars" aria-label={`${testimonial.rating} out of 5 stars`}>
+          {Array.from({ length: testimonial.rating }).map((_, i) => (
+            <Star key={i} aria-hidden="true" />
+          ))}
+        </div>
+        <p>&ldquo;{testimonial.quote}&rdquo;</p>
+        <div className="author">
+          <div className="name">{testimonial.name}</div>
+          <div className="role">{role}</div>
+        </div>
+      </div>
+    </div>
   );
 }

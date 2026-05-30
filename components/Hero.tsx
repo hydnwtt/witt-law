@@ -1,69 +1,102 @@
 /**
  * components/Hero.tsx
- * Full-width page hero: optional eyebrow, H1, one-line subhead, primary +
- * secondary CTAs, optional media slot. This is the page's single <h1>.
- * Phone CTA comes from firm.ts — never hard-coded.
+ * Page hero in the design's three flavors:
+ *  - "split"  : olive text block + image (homepage .hero-split)
+ *  - "banner" : olive band with page title (interior pages .hero-banner)
+ *  - "center" : centered on paper (listing/reviews .hero-center)
+ * Single <h1> per page. Phone from firm.ts.
  */
 
 import type { ReactNode } from "react";
 import { Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
+
+interface HeroProps {
+  variant?: "split" | "banner" | "center";
+  eyebrow?: ReactNode;
+  title: ReactNode;
+  subhead?: ReactNode;
+  primaryCta?: { label: string; href: string } | null;
+  showCall?: boolean;
+  media?: ReactNode;
+  children?: ReactNode;
+}
+
 import { firm } from "@/content/firm";
 
+function Actions({ onPaper, primaryCta, showCall }: {
+  onPaper: boolean;
+  primaryCta: { label: string; href: string } | null;
+  showCall: boolean;
+}) {
+  if (!primaryCta && !showCall) return null;
+  return (
+    <div className="hero-actions">
+      {primaryCta && (
+        <a className={`btn ${onPaper ? "btn--primary" : "btn--light"}`} href={primaryCta.href}>
+          {primaryCta.label} <span className="arr">↗</span>
+        </a>
+      )}
+      {showCall && (
+        <a className={`btn ${onPaper ? "btn--ghost" : "btn--ghost-light"}`} href={firm.phone.href}>
+          <Phone /> Call {firm.phone.display}
+        </a>
+      )}
+    </div>
+  );
+}
+
 export function Hero({
+  variant = "banner",
   eyebrow,
   title,
   subhead,
   primaryCta = { label: "Schedule a Consultation", href: "/contact/" },
-  showCallButton = true,
+  showCall = true,
   media,
-}: {
-  eyebrow?: string;
-  title: ReactNode;
-  subhead?: ReactNode;
-  primaryCta?: { label: string; href: string } | null;
-  showCallButton?: boolean;
-  /** Optional right-column media (e.g. ImagePlaceholder or next/image). */
-  media?: ReactNode;
-}) {
-  return (
-    <section className="border-b border-line bg-bg-soft">
-      <Container className="py-14 sm:py-20">
-        <div
-          className={`grid items-center gap-10 ${
-            media ? "lg:grid-cols-2" : ""
-          }`}
-        >
-          <div className="max-w-2xl">
-            {eyebrow && (
-              <span className="text-sm font-semibold uppercase tracking-wider text-accent-strong">
-                {eyebrow}
-              </span>
-            )}
-            <h1 className="mt-3 text-4xl leading-tight sm:text-5xl">{title}</h1>
-            <span className="rule-accent mt-5" />
-            {subhead && (
-              <p className="mt-5 text-lg text-muted leading-relaxed sm:text-xl">
-                {subhead}
-              </p>
-            )}
-            <div className="mt-8 flex flex-wrap gap-3">
-              {primaryCta && (
-                <Button href={primaryCta.href} variant="primary">
-                  {primaryCta.label}
-                </Button>
-              )}
-              {showCallButton && (
-                <Button href={firm.phone.href} variant="secondary">
-                  <Phone aria-hidden="true" className="size-4" />
-                  Call {firm.phone.display}
-                </Button>
-              )}
-            </div>
-          </div>
-          {media && <div>{media}</div>}
+  children,
+}: HeroProps) {
+  if (variant === "split") {
+    return (
+      <section className="hero-split hatch">
+        <div className="hero-split__text">
+          {eyebrow && <span className="eyebrow on-dark">{eyebrow}</span>}
+          <h1>{title}</h1>
+          {subhead && <p className="lead">{subhead}</p>}
+          <Actions onPaper={false} primaryCta={primaryCta} showCall={showCall} />
+          {children}
         </div>
+        <div className="hero-split__media">{media}</div>
+      </section>
+    );
+  }
+
+  if (variant === "center") {
+    return (
+      <section className="hero-center">
+        <Container>
+          {eyebrow && <span className="eyebrow" style={{ justifyContent: "center" }}>{eyebrow}</span>}
+          <h1 style={{ marginTop: 18 }}>{title}</h1>
+          {subhead && <p className="lead">{subhead}</p>}
+          {(primaryCta || showCall) && (
+            <div className="hero-actions" style={{ justifyContent: "center", marginTop: 26 }}>
+              <Actions onPaper primaryCta={primaryCta} showCall={showCall} />
+            </div>
+          )}
+          {children}
+        </Container>
+      </section>
+    );
+  }
+
+  return (
+    <section className="hero-banner hatch">
+      <Container>
+        {eyebrow && <span className="eyebrow on-dark">{eyebrow}</span>}
+        <h1>{title}</h1>
+        {subhead && <p className="lead">{subhead}</p>}
+        <Actions onPaper={false} primaryCta={primaryCta} showCall={showCall} />
+        {children}
       </Container>
     </section>
   );

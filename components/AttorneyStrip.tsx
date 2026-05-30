@@ -1,27 +1,41 @@
 /**
  * components/AttorneyStrip.tsx
- * "Who handles this" strip on pillar pages. Resolves the handling attorneys from
- * a pillar's attorneySlugs (content/team.ts) and renders AttorneyCards. Bio links
- * point to /attorneys/{slug}/ (built in Phase 1, P8–P9).
+ * "Handling attorney" strip on pillar/service pages (design's .attorney-strip):
+ * square photo + role + name + blurb + "View full bio →". Resolves the first
+ * handling attorney from a pillar's attorneySlugs.
  */
 
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { AttorneyCard } from "@/components/AttorneyCard";
+import Link from "next/link";
+import Image from "next/image";
+import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { getMember } from "@/content/team";
 
 export function AttorneyStrip({ slugs }: { slugs: string[] }) {
-  const members = slugs.map(getMember).filter((m) => m !== undefined);
-  if (!members.length) return null;
+  const member = slugs.map(getMember).find((m) => m !== undefined);
+  if (!member) return null;
 
   return (
-    <div>
-      <SectionHeading as="h2" eyebrow="Your team">
-        {members.length > 1 ? "Attorneys who handle this" : "Who handles this"}
-      </SectionHeading>
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {members.map((m) => (
-          <AttorneyCard key={m.slug} member={m} />
-        ))}
+    <div className="attorney-strip">
+      {member.headshot ? (
+        <Image
+          className="attorney-strip__photo"
+          src={member.headshot}
+          alt={member.name}
+          width={200}
+          height={200}
+        />
+      ) : (
+        <div className="attorney-strip__photo" style={{ position: "relative" }}>
+          <ImagePlaceholder label={member.name} />
+        </div>
+      )}
+      <div className="attorney-strip__info">
+        <div className="role">Handling Attorney</div>
+        <h3>{member.name}</h3>
+        <p>{member.blurb}</p>
+        <Link className="link-arrow" href={`/attorneys/${member.slug}/`}>
+          View full bio <span className="arr">→</span>
+        </Link>
       </div>
     </div>
   );

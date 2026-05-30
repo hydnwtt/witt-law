@@ -1,10 +1,8 @@
 /**
  * components/PracticeSection.tsx
- * One sub-topic block on a pillar page, rendered as a real anchored <section>
- * with an <h2> — replacing the old site's JS-gated tabs. Content is always in
- * the DOM on load and reachable by anchor link (e.g. /personal-injury/#auto-accidents).
- *
- * `children` is the body copy; pass a CopyStatusBadge via `flag` for unreviewed copy.
+ * One anchored sub-topic on a pillar page — a real <section id> with an <h2> and
+ * prose body, present in the initial DOM (no JS tab-gating). `flag` carries a
+ * CopyStatusBadge for unreviewed copy; `cta` optionally links to the child page.
  */
 
 import type { ReactNode } from "react";
@@ -19,24 +17,22 @@ export function PracticeSection({
   id: string;
   title: string;
   children: ReactNode;
-  /** Optional badge (e.g. <CopyStatusBadge status="write-verify" />). */
   flag?: ReactNode;
-  /** Optional link to the full child page (Phase 2). */
   cta?: { label: string; href: string };
 }) {
   return (
-    <section id={id} className="scroll-mt-28 border-t border-line py-8 first:border-t-0">
-      <div className="flex flex-wrap items-center gap-3">
-        <h2 className="text-2xl">{title}</h2>
+    <section
+      id={id}
+      style={{ scrollMarginTop: "96px", borderTop: "1px solid var(--line)", paddingBlock: "var(--sp-6)" }}
+    >
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, marginBottom: 8 }}>
+        <h2 style={{ fontSize: "var(--fs-h3)" }}>{title}</h2>
         {flag}
       </div>
-      <div className="prose mt-4">{children}</div>
+      <div className="prose">{children}</div>
       {cta && (
-        <a
-          href={cta.href}
-          className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent-strong hover:text-accent-dark"
-        >
-          {cta.label} &rarr;
+        <a className="link-arrow" href={cta.href} style={{ marginTop: 16 }}>
+          {cta.label} <span className="arr">→</span>
         </a>
       )}
     </section>

@@ -1,117 +1,107 @@
 /**
- * components/Footer.tsx  (F2)
- * Site footer: logo + descriptor, NAP (address → Google Maps, phone tel:,
- * Facebook), two link columns (Practice Areas / Firm), a Get Directions link,
- * dynamic-year copyright, and the required disclaimers. ALL contact data comes
- * from firm.ts — nothing hard-coded. The year is computed at render, not baked in.
+ * components/Footer.tsx
+ * Olive footer (design's .site-footer): brand + descriptor, NAP (map/phone/
+ * Facebook), Practice Areas / Firm columns, embedded map + Get Directions,
+ * dynamic-year copyright, disclaimers. All contact data from firm.ts.
  */
 
 import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
+import { Container } from "@/components/ui/Container";
+import { footerPracticeNav, footerFirmNav } from "@/lib/nav";
+import { firm, disclaimers } from "@/content/firm";
 
-/** Facebook brand mark (lucide dropped brand icons), inline so we avoid a dep. */
-function FacebookIcon({ className }: { className?: string }) {
+const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(
+  `${firm.address.line1}, ${firm.address.city}, ${firm.address.state} ${firm.address.zip}`
+)}&output=embed`;
+
+function FacebookIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
-      <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.52 1.49-3.91 3.78-3.91 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.9h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94Z" />
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.9 3.78-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.9h-2.34V22c4.78-.79 8.43-4.94 8.43-9.94Z" />
     </svg>
   );
 }
-import { Container } from "@/components/ui/Container";
-import { Logo } from "@/components/ui/Logo";
-import { footerPracticeNav, footerFirmNav } from "@/lib/nav";
-import { firm, disclaimers } from "@/content/firm";
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-line bg-bg-soft">
-      <Container className="py-12">
-        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr_1fr]">
-          {/* Brand + NAP */}
-          <div>
-            <Logo />
-            <p className="mt-3 max-w-sm text-sm text-muted leading-relaxed">
-              A Southern Utah law firm serving {firm.serviceArea}.
-            </p>
-            <address className="mt-4 flex flex-col gap-2 text-sm not-italic text-ink">
-              <a
-                href={firm.address.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-start gap-2 hover:text-navy"
-              >
-                <MapPin aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-accent" />
+    <footer className="site-footer">
+      <Container>
+        <div className="footer-top">
+          <div className="footer-brand">
+            <div className="brand">
+              {firm.shortName.toUpperCase()}
+              <sup>&reg;</sup>
+            </div>
+            <p>{firm.name} — trusted attorneys serving {firm.serviceArea}.</p>
+            <div className="footer-meta">
+              <a href={firm.address.mapUrl} target="_blank" rel="noopener">
+                <MapPin />
                 <span>
                   {firm.address.line1}
                   <br />
                   {firm.address.city}, {firm.address.state} {firm.address.zip}
                 </span>
               </a>
-              <a href={firm.phone.href} className="inline-flex items-center gap-2 hover:text-navy">
-                <Phone aria-hidden="true" className="size-4 shrink-0 text-accent" />
+              <a href={firm.phone.href}>
+                <Phone />
                 {firm.phone.display}
               </a>
-              <a
-                href={firm.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 hover:text-navy"
-              >
-                <FacebookIcon className="size-4 shrink-0 text-accent" />
+              <a href={firm.facebook} target="_blank" rel="noopener">
+                <FacebookIcon />
                 Facebook
               </a>
-            </address>
-            <a
-              href={firm.address.mapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link mt-4 inline-block text-sm"
-            >
-              Get Directions
-            </a>
+            </div>
           </div>
 
-          {/* Practice Areas */}
-          <nav aria-label="Practice areas">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-ink">
-              Practice Areas
-            </h2>
-            <ul className="mt-4 flex flex-col gap-2">
-              {footerPracticeNav.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-muted hover:text-navy">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <div className="footer-col">
+            <h4>Practice Areas</h4>
+            {footerPracticeNav.map((l) => (
+              <Link key={l.href} href={l.href}>
+                {l.label}
+              </Link>
+            ))}
+          </div>
 
-          {/* Firm */}
-          <nav aria-label="Firm">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-ink">Firm</h2>
-            <ul className="mt-4 flex flex-col gap-2">
-              {footerFirmNav.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-muted hover:text-navy">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <div className="footer-col">
+            <h4>Firm</h4>
+            {footerFirmNav.map((l) => (
+              <Link key={l.href} href={l.href}>
+                {l.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="footer-col footer-map">
+            <h4>Find us</h4>
+            <div className="footer-map__frame">
+              <iframe
+                title="Map to Witt Law Offices"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                src={mapEmbed}
+              />
+            </div>
+            <a className="link-arrow" href={firm.address.mapUrl} target="_blank" rel="noopener">
+              Get Directions <span className="arr">→</span>
+            </a>
+          </div>
         </div>
 
-        {/* Legal */}
-        <div className="mt-10 border-t border-line pt-6 text-xs text-muted">
-          <p>{disclaimers.footer}</p>
-          <p className="mt-2">{disclaimers.advertising}</p>
-          <p className="mt-2">
+        <div className="footer-bottom">
+          <span>
             &copy; {year} {firm.name}. All rights reserved.
-          </p>
+          </span>
+          <span>
+            <Link href="/privacy/">Privacy</Link> &nbsp;·&nbsp;{" "}
+            <Link href="/legal-disclaimer/">Disclaimer</Link>
+          </span>
         </div>
+        <p className="footer-disclaimer">
+          {disclaimers.footer} {disclaimers.advertising}
+        </p>
       </Container>
     </footer>
   );

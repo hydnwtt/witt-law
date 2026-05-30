@@ -1,25 +1,28 @@
 /**
  * components/ui/Button.tsx
- * One button primitive used site-wide. Renders next/link for internal routes,
- * a plain <a> for tel:/external, or a <button> when no href. Variants map to the
- * .btn-* classes in globals.css. Server component (no interactivity of its own).
+ * Button primitive mapping to the design's .btn variants (Geist Mono, uppercase,
+ * 4px radius). Renders next/link for internal routes, <a> for tel:/external, or
+ * <button>. An optional trailing arrow (↗ for actions, → for links) matches the
+ * templates.
  */
 
 import Link from "next/link";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "on-dark" | "outline-on-dark";
+type Variant = "primary" | "light" | "ghost" | "ghost-light" | "ink";
 
 const variantClass: Record<Variant, string> = {
-  primary: "btn btn-primary",
-  secondary: "btn btn-secondary",
-  "on-dark": "btn btn-on-dark",
-  "outline-on-dark": "btn btn-outline-on-dark",
+  primary: "btn btn--primary",
+  light: "btn btn--light",
+  ghost: "btn btn--ghost",
+  "ghost-light": "btn btn--ghost-light",
+  ink: "btn btn--ink",
 };
 
 interface BaseProps {
   children: ReactNode;
   variant?: Variant;
+  arrow?: "up-right" | "right" | null;
   className?: string;
 }
 
@@ -32,31 +35,37 @@ type ButtonProps = BaseProps &
 export function Button({
   children,
   variant = "primary",
+  arrow = null,
   className = "",
   href,
   ...rest
 }: ButtonProps) {
   const cls = `${variantClass[variant]} ${className}`.trim();
+  const content = (
+    <>
+      {children}
+      {arrow === "up-right" && <span className="arr">↗</span>}
+      {arrow === "right" && <span className="arr">→</span>}
+    </>
+  );
 
   if (href) {
-    const isInternal = href.startsWith("/");
-    if (isInternal) {
+    if (href.startsWith("/")) {
       return (
         <Link href={href} className={cls} {...(rest as object)}>
-          {children}
+          {content}
         </Link>
       );
     }
     return (
       <a href={href} className={cls} {...(rest as ComponentPropsWithoutRef<"a">)}>
-        {children}
+        {content}
       </a>
     );
   }
-
   return (
     <button className={cls} {...(rest as ComponentPropsWithoutRef<"button">)}>
-      {children}
+      {content}
     </button>
   );
 }

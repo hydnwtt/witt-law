@@ -1,10 +1,8 @@
 /**
  * components/BlockContent.tsx
  * Renders structured copy blocks (paragraphs, bullet lists, subheadings) so the
- * long-form pillar copy lives in typed content, not JSX. Supports lightweight
- * inline markup: **bold** and [text](href) (internal links use next/link).
- *
- * Render inside a `.prose` container for spacing/measure.
+ * long-form copy lives in typed content, not JSX. Inline markup: **bold** and
+ * [text](href). Render inside a `.prose` container for styling.
  */
 
 import Link from "next/link";
@@ -29,13 +27,9 @@ function renderInline(text: string): ReactNode[] {
       const href = m[5];
       nodes.push(
         href.startsWith("/") ? (
-          <Link key={key++} href={href} className="link">
-            {m[4]}
-          </Link>
+          <Link key={key++} href={href}>{m[4]}</Link>
         ) : (
-          <a key={key++} href={href} className="link">
-            {m[4]}
-          </a>
+          <a key={key++} href={href}>{m[4]}</a>
         )
       );
     }
