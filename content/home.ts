@@ -18,7 +18,7 @@ export const homeIntro = {
   heading: "A Southern Utah firm you can actually talk to.",
   paragraphs: [
     "When you're dealing with an injury, a divorce, a criminal charge, or planning for your family's future, you don't just need a lawyer — you need someone who will listen first and explain things in plain language. That's how we've practiced at Witt Law since opening our St. George office.",
-    "Attorneys Marshall Witt and Abraham Ivie have spent their careers guiding people through exactly these situations. Whatever brought you here, we can help you understand your options and move forward with confidence.",
+    "Attorney Marshall Witt has spent his career guiding people through exactly these situations. Whatever brought you here, we can help you understand your options and move forward with confidence.",
   ],
 };
 
