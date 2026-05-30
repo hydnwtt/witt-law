@@ -9,11 +9,14 @@ import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/site";
 import { practiceAreas } from "@/content/practiceAreas";
 import { attorneys } from "@/content/team";
+import { posts } from "@/content/posts";
+
+type Freq = MetadataRoute.Sitemap[number]["changeFrequency"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const staticRoutes: { path: string; priority: number; freq: MetadataRoute.Sitemap[number]["changeFrequency"] }[] = [
+  const staticRoutes: { path: string; priority: number; freq: Freq }[] = [
     { path: "/", priority: 1, freq: "weekly" },
     { path: "/about/", priority: 0.7, freq: "monthly" },
     { path: "/attorneys/", priority: 0.7, freq: "monthly" },
@@ -22,24 +25,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/reviews/", priority: 0.6, freq: "monthly" },
     { path: "/faqs/", priority: 0.6, freq: "monthly" },
     { path: "/blog/", priority: 0.6, freq: "weekly" },
-    { path: "/areas-we-serve/", priority: 0.5, freq: "monthly" },
     { path: "/privacy/", priority: 0.2, freq: "yearly" },
     { path: "/legal-disclaimer/", priority: 0.2, freq: "yearly" },
   ];
 
-  const pillarRoutes = practiceAreas.map((p) => ({
-    path: `/${p.slug}/`,
-    priority: 0.9,
-    freq: "monthly" as const,
-  }));
+  const pillarRoutes = practiceAreas.map((p) => ({ path: `/${p.slug}/`, priority: 0.9, freq: "monthly" as Freq }));
 
-  const attorneyRoutes = attorneys.map((a) => ({
-    path: `/attorneys/${a.slug}/`,
-    priority: 0.7,
-    freq: "monthly" as const,
-  }));
+  const serviceRoutes = practiceAreas.flatMap((p) =>
+    p.services.map((s) => ({ path: `/${p.slug}/${s.slug}/`, priority: 0.7, freq: "monthly" as Freq }))
+  );
 
-  return [...staticRoutes, ...pillarRoutes, ...attorneyRoutes].map((r) => ({
+  const attorneyRoutes = attorneys.map((a) => ({ path: `/attorneys/${a.slug}/`, priority: 0.7, freq: "monthly" as Freq }));
+
+  const blogRoutes = posts.map((p) => ({ path: `/blog/${p.slug}/`, priority: 0.5, freq: "monthly" as Freq }));
+
+  return [...staticRoutes, ...pillarRoutes, ...serviceRoutes, ...attorneyRoutes, ...blogRoutes].map((r) => ({
     url: absoluteUrl(r.path),
     lastModified: now,
     changeFrequency: r.freq,
