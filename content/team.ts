@@ -30,7 +30,7 @@ export const team: TeamMember[] = [
     name: "Marshall Witt",
     title: "Founding Attorney",
     role: "attorney",
-    headshot: "/images/team/marshall-witt.jpg",
+    headshot: "/images/team/marshall-witt.png",
     blurb:
       "Founder of Witt Law, handling personal injury, criminal defense, family law, estate planning, and mediation across Southern Utah.",
     bio: [

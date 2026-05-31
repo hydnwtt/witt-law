@@ -97,7 +97,10 @@ export default function Contact() {
                 </div>
               </div>
               <div className="footer-map" style={{ marginTop: 28 }}>
-                <div className="footer-map__frame" style={{ borderColor: "var(--line)" }}>
+                <div
+                  className="footer-map__frame"
+                  style={{ borderColor: "var(--line)", aspectRatio: "4 / 3", minHeight: 380 }}
+                >
                   <iframe
                     title="Map to Witt Law Offices"
                     loading="lazy"
