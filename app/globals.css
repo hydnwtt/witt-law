@@ -178,6 +178,8 @@ a { color: inherit; text-decoration: none; }
 .site-header { background: var(--olive); color: var(--on-olive); border-bottom: 1px solid var(--line-on-dark); position: sticky; top: 0; z-index: 50; }
 .site-header .container { display: flex; align-items: center; justify-content: space-between; height: 72px; }
 .brand { font-family: var(--font-display); font-size: 1.4rem; letter-spacing: 0.02em; color: var(--on-olive); display: inline-flex; align-items: flex-start; gap: 2px; white-space: nowrap; flex: none; }
+.brand-link { display: inline-flex; align-items: center; flex: none; }
+.footer-brand .brand-link { margin-bottom: 14px; }
 .brand sup { font-family: var(--font-sans); font-size: 0.5em; top: -0.2em; }
 .nav { display: flex; align-items: center; gap: 28px; }
 .nav > a:not(.btn) { font-family: var(--font-sans); font-size: var(--fs-sm); font-weight: 400; color: var(--on-olive-dim); transition: color .15s var(--ease); }

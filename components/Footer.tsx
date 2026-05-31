@@ -8,6 +8,7 @@
 import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { Logo } from "@/components/ui/Logo";
 import { footerPracticeNav, footerFirmNav } from "@/lib/nav";
 import { firm, disclaimers } from "@/content/firm";
 
@@ -31,10 +32,8 @@ export function Footer() {
       <Container>
         <div className="footer-top">
           <div className="footer-brand">
-            <div className="brand">
-              {firm.shortName.toUpperCase()}
-              <sup>&reg;</sup>
-            </div>
+            <Logo height={34} />
+
             <p>{firm.name} — trusted attorneys serving {firm.serviceArea}.</p>
             <div className="footer-meta">
               <a href={firm.address.mapUrl} target="_blank" rel="noopener">

@@ -38,9 +38,8 @@ export function Header() {
   return (
     <header className="site-header">
       <div className="container">
-        <Link className="brand" href="/" aria-label={`${firm.name} — home`}>
-          {firm.shortName.toUpperCase()}
-          <sup>&reg;</sup>
+        <Link className="brand-link" href="/" aria-label={`${firm.name} — home`}>
+          <Logo height={30} />
         </Link>
 
         <nav className="nav" aria-label="Primary">

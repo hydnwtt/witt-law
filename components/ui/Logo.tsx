@@ -1,17 +1,26 @@
 /**
  * components/ui/Logo.tsx
- * Wordmark per the design: "WITT LAW®" in DM Serif Display (the .brand class).
- * Color is inherited (on-olive in header/footer). Placeholder for the firm's
- * real SVG logo in public/brand/.
+ * Firm wordmark — the cream "WITT [shield] LAW" logo (public/brand/witt-law-logo.png,
+ * 1503×423, transparent). Built for dark/olive grounds (header + footer); it would
+ * be invisible on cream, so only use it there. `height` sets the rendered size;
+ * width derives from the logo's aspect ratio. Accessible name via alt.
  */
 
+import Image from "next/image";
 import { firm } from "@/content/firm";
 
-export function Logo({ className = "" }: { className?: string }) {
+const ASPECT = 1503 / 423; // ≈ 3.55
+
+export function Logo({ height = 30, className = "" }: { height?: number; className?: string }) {
   return (
-    <span className={`brand ${className}`.trim()}>
-      {firm.shortName.toUpperCase()}
-      <sup>&reg;</sup>
-    </span>
+    <Image
+      src="/brand/witt-law-logo.png"
+      alt={`${firm.name} — home`}
+      height={height}
+      width={Math.round(height * ASPECT)}
+      priority
+      className={className}
+      style={{ height, width: "auto" }}
+    />
   );
 }
