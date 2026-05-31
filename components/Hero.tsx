@@ -11,30 +11,47 @@ import type { ReactNode } from "react";
 import { Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 
+import { firm } from "@/content/firm";
+
+type Cta = { label: string; href: string };
+
 interface HeroProps {
   variant?: "split" | "banner" | "center";
   eyebrow?: ReactNode;
   title: ReactNode;
   subhead?: ReactNode;
-  primaryCta?: { label: string; href: string } | null;
+  primaryCta?: Cta | null;
+  /** Optional second button rendered in the SAME action row (e.g. "Meet the team"). */
+  secondaryCta?: Cta | null;
   showCall?: boolean;
   media?: ReactNode;
   children?: ReactNode;
 }
 
-import { firm } from "@/content/firm";
-
-function Actions({ onPaper, primaryCta, showCall }: {
+function Actions({
+  onPaper,
+  primaryCta,
+  secondaryCta,
+  showCall,
+}: {
   onPaper: boolean;
-  primaryCta: { label: string; href: string } | null;
+  primaryCta: Cta | null;
+  secondaryCta?: Cta | null;
   showCall: boolean;
 }) {
-  if (!primaryCta && !showCall) return null;
+  if (!primaryCta && !secondaryCta && !showCall) return null;
+  const isInternal = (href: string) => href.startsWith("/");
   return (
     <div className="hero-actions">
       {primaryCta && (
         <a className={`btn ${onPaper ? "btn--primary" : "btn--light"}`} href={primaryCta.href}>
           {primaryCta.label} <span className="arr">↗</span>
+        </a>
+      )}
+      {secondaryCta && (
+        <a className={`btn ${onPaper ? "btn--ghost" : "btn--ghost-light"}`} href={secondaryCta.href}>
+          {secondaryCta.label}
+          {!isInternal(secondaryCta.href) && <span className="arr">↗</span>}
         </a>
       )}
       {showCall && (
@@ -52,6 +69,7 @@ export function Hero({
   title,
   subhead,
   primaryCta = { label: "Schedule a Consultation", href: "/contact/" },
+  secondaryCta = null,
   showCall = true,
   media,
   children,
@@ -63,7 +81,7 @@ export function Hero({
           {eyebrow && <span className="eyebrow on-dark">{eyebrow}</span>}
           <h1>{title}</h1>
           {subhead && <p className="lead">{subhead}</p>}
-          <Actions onPaper={false} primaryCta={primaryCta} showCall={showCall} />
+          <Actions onPaper={false} primaryCta={primaryCta} secondaryCta={secondaryCta} showCall={showCall} />
           {children}
         </div>
         <div className="hero-split__media">{media}</div>
@@ -80,7 +98,7 @@ export function Hero({
           {subhead && <p className="lead">{subhead}</p>}
           {(primaryCta || showCall) && (
             <div className="hero-actions" style={{ justifyContent: "center", marginTop: 26 }}>
-              <Actions onPaper primaryCta={primaryCta} showCall={showCall} />
+              <Actions onPaper primaryCta={primaryCta} secondaryCta={secondaryCta} showCall={showCall} />
             </div>
           )}
           {children}
@@ -95,7 +113,7 @@ export function Hero({
         {eyebrow && <span className="eyebrow on-dark">{eyebrow}</span>}
         <h1>{title}</h1>
         {subhead && <p className="lead">{subhead}</p>}
-        <Actions onPaper={false} primaryCta={primaryCta} showCall={showCall} />
+        <Actions onPaper={false} primaryCta={primaryCta} secondaryCta={secondaryCta} showCall={showCall} />
         {children}
       </Container>
     </section>
