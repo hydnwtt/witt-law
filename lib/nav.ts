@@ -35,6 +35,7 @@ export const footerFirmNav: NavLink[] = [
   { label: "Results", href: "/results/" },
   { label: "Reviews", href: "/reviews/" },
   { label: "Blog", href: "/blog/" },
+  { label: "Areas We Serve", href: "/areas-we-serve/" },
   { label: "Contact", href: "/contact/" },
   { label: "Privacy Policy", href: "/privacy/" },
   { label: "Legal Disclaimer", href: "/legal-disclaimer/" },
