@@ -66,8 +66,9 @@ export const team: TeamMember[] = [
     blurb:
       "Paralegal, bookkeeper, and office manager with nearly two decades at Witt Law.",
     bio: [
-      "Sheryl has been with Witt Law for nearly 18 years. She holds an A.S. in General Science, a B.S. in Business Administration, and a Paralegal Certificate from Weber State.",
-      "She previously worked for the California Medicare Part B program as a lead supervisor in claims processing and served as a Medicare Hearing Officer. An avid golfer and former LPGA teaching professional, she loves camping, hiking, gardening, and animals.",
+      "Sheryl has been with Witt Law for nearly 18 years as a paralegal, bookkeeper and office manager. She has an A.S. in General Science, a B.S. in Business Administration, and a Paralegal Certificate from Weber State.",
+      "She previously worked for the California Medicare Part B program as a lead supervisor of the claims processing department, and she was a Medicare Hearing Officer on behalf of the federal government.",
+      "Sheryl is an avid golfer and a previous member of the LPGA teaching professional division. She loves camping, hiking, gardening, golf and animals.",
     ],
   },
   {
@@ -78,8 +79,9 @@ export const team: TeamMember[] = [
     headshot: "/images/team/hannah-beck.jpg",
     blurb: "The friendly first point of contact at Witt Law.",
     bio: [
-      "Hannah has been with Witt Law for about three years. She grew up in Georgia and earned a B.S. in Public Health from Emory University.",
-      "A certified DBT and CBT instructor, she worked with the State of Utah for four years as a behavioral technician before transitioning to support minors and adults with autism, Down syndrome, and other needs. She's passionate about public-safety causes.",
+      "Hannah has been with Witt Law for about three years as our front-desk legal assistant. Hannah grew up in the state of Georgia and received her B.S. degree in Public Health from Emory University.",
+      "She is a certified DBT and CBT instructor and worked with the State of Utah for four years as a behavioral technician until she transitioned to working with autistic, Down syndrome, and spectrum minors and adults.",
+      "She has a passion for helping with public safety, the bomb squad, and SWAT, and assisting them in gaining access to more funding for gear and training.",
     ],
   },
 ];
