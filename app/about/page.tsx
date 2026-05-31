@@ -11,13 +11,14 @@ import { JsonLd } from "@/components/JsonLd";
 import { organizationSchema, legalServiceSchema, breadcrumbSchema } from "@/lib/jsonld";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { CoverImage } from "@/components/ui/CoverImage";
 import { Hero } from "@/components/Hero";
 import { CTA } from "@/components/CTA";
 import { ValueProps } from "@/components/ValueProps";
 import { AttorneyCard } from "@/components/AttorneyCard";
 import { team } from "@/content/team";
 import { aboutCopy } from "@/content/siteCopy";
+import { firmImages } from "@/content/media";
 
 export const metadata = buildMetadata({
   title: "About Witt Law | St. George, Utah Law Firm",
@@ -69,7 +70,11 @@ export default function About() {
               ))}
             </div>
             <div style={{ aspectRatio: "4 / 5", position: "relative", overflow: "hidden" }}>
-              <ImagePlaceholder label="Witt Law office, St. George" />
+              <CoverImage
+                src={firmImages.aboutOffice}
+                alt="Witt Law office building on Bluff Street in St. George"
+                sizes="(max-width: 900px) 100vw, 45vw"
+              />
             </div>
           </div>
         </Container>

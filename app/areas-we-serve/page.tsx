@@ -8,10 +8,11 @@ import { buildMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/jsonld";
 import { Container } from "@/components/ui/Container";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { CoverImage } from "@/components/ui/CoverImage";
 import { Hero } from "@/components/Hero";
 import { CTA } from "@/components/CTA";
 import { cities } from "@/content/cities";
+import { cityImages } from "@/content/media";
 
 export const metadata = buildMetadata({
   title: "Areas We Serve | Witt Law Offices, Southern Utah",
@@ -44,7 +45,12 @@ export default function AreasWeServe() {
             {cities.map((c) => (
               <Link key={c.slug} className="card" href={`/areas-we-serve/${c.slug}/`}>
                 <div className="card__media">
-                  <ImagePlaceholder label={`${c.name}, Utah`} />
+                  <CoverImage
+                    src={cityImages[c.slug]}
+                    alt={`${c.name}, Utah`}
+                    label={`${c.name}, Utah`}
+                    sizes="(max-width: 900px) 100vw, 380px"
+                  />
                 </div>
                 <div className="card__body">
                   <span className="card__tag">{c.county}</span>

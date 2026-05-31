@@ -1,26 +1,34 @@
 /**
  * components/PracticeCard.tsx
  * Image-top practice-area card (design's .card). Whole card links to the pillar.
- * Uses the olive placeholder until the firm supplies practice-area photography.
+ * Shows the firm's practice-area photo (content/media.ts) via CoverImage, falling
+ * back to the olive placeholder when no image is supplied.
  */
 
 import Link from "next/link";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { CoverImage } from "@/components/ui/CoverImage";
 
 export function PracticeCard({
   name,
   description,
   href,
+  image,
 }: {
   slug?: string;
   name: string;
   description: string;
   href: string;
+  image?: string;
 }) {
   return (
     <Link className="card" href={href}>
       <div className="card__media">
-        <ImagePlaceholder label={name} />
+        <CoverImage
+          src={image}
+          alt={name}
+          label={name}
+          sizes="(max-width: 900px) 100vw, 380px"
+        />
       </div>
       <div className="card__body">
         <h3>{name}</h3>

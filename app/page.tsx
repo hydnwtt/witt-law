@@ -13,7 +13,7 @@ import { legalServiceSchema, organizationSchema } from "@/lib/jsonld";
 
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { CoverImage } from "@/components/ui/CoverImage";
 import { Hero } from "@/components/Hero";
 import { CTA } from "@/components/CTA";
 import { TrustBar } from "@/components/TrustBar";
@@ -30,6 +30,7 @@ import {
 } from "@/content/home";
 import { practiceAreas } from "@/content/practiceAreas";
 import { featuredTestimonials } from "@/content/testimonials";
+import { practiceImages, firmImages } from "@/content/media";
 
 export const metadata = buildMetadata({
   title: "Witt Law Offices | Attorneys in St. George, Utah",
@@ -48,7 +49,14 @@ export default function Home() {
         eyebrow={homeHero.eyebrow}
         title={homeHero.title}
         subhead={homeHero.subhead}
-        media={<ImagePlaceholder label="Witt Law attorneys, St. George" />}
+        media={
+          <CoverImage
+            src={firmImages.heroTeam}
+            alt="The Witt Law team in St. George, Utah"
+            priority
+            sizes="(max-width: 900px) 100vw, 50vw"
+          />
+        }
       />
 
       <TrustBar caption={homeTrustCaption} items={homeTrustItems} />
@@ -78,7 +86,12 @@ export default function Home() {
               </Link>
             </div>
             <div style={{ aspectRatio: "4 / 3", position: "relative", overflow: "hidden" }}>
-              <ImagePlaceholder label="Witt Law office team" />
+              <CoverImage
+                src={firmImages.introTeam}
+                alt="A consultation at Witt Law in St. George"
+                sizes="(max-width: 900px) 100vw, 45vw"
+                position="center top"
+              />
             </div>
           </div>
         </Container>
@@ -98,6 +111,7 @@ export default function Home() {
                 name={p.name}
                 description={homeCardBlurbs[p.slug] ?? p.subhead}
                 href={`/${p.slug}/`}
+                image={practiceImages[p.slug]}
               />
             ))}
           </div>
