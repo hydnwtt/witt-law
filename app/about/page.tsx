@@ -45,14 +45,9 @@ export default function About() {
         title="About Witt Law"
         subhead={aboutCopy.subhead}
         primaryCta={{ label: "Schedule a Consultation", href: "/contact/" }}
+        secondaryCta={{ label: "Meet the team", href: "/attorneys/" }}
         showCall={false}
-      >
-        <div className="hero-actions" style={{ marginTop: 0 }}>
-          <Link className="btn btn--ghost-light" href="/attorneys/">
-            Meet the team
-          </Link>
-        </div>
-      </Hero>
+      />
 
       {/* Story */}
       <section className="section">
